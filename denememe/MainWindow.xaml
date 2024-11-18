@@ -7,15 +7,20 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="1500" Width="1200">
     <Grid  VerticalAlignment="Top" Width="1000" Height="1000" Name="WorkingArea" Canvas.Left="-570" Canvas.Top="-723">
+        <StackPanel>
+            
         <Button VerticalAlignment="Top" HorizontalAlignment="Left" Content="aç" Width="150" Height="50" Click="Button_Click"/>
-        
-        <Grid  Background="Wheat" MinHeight="500" MinWidth="1000" Panel.ZIndex="5" VerticalAlignment="Top" HorizontalAlignment="Center" Height="auto" Width="auto" MouseWheel="PanAndZoomCanvas_MouseWheel"
+        <StackPanel >
+            <TextBlock x:Name="Xeksen" Text="X:" FontSize="20" FontWeight="Bold"/>
+            <TextBlock x:Name="Yeksen" Text="Y:" FontSize="20" FontWeight="Bold"/>
+        </StackPanel>
+        </StackPanel>
+        <Grid   Background="Wheat" MinHeight="500" MinWidth="1000" Panel.ZIndex="5" VerticalAlignment="Top" HorizontalAlignment="Center" Height="auto" Width="auto" MouseWheel="PanAndZoomCanvas_MouseWheel"
         MouseMove="PanAndZoomCanvas_MouseMove"
-        MouseDown="PanAndZoomCanvas_MouseDown" x:Name="Panner" Margin="0,104,0,0">
-            <StackPanel >
-                <TextBlock x:Name="Xeksen" Text="X:" FontSize="20" FontWeight="Bold"/>
-                <TextBlock x:Name="Yeksen" Text="Y:" FontSize="20" FontWeight="Bold"/>
-            </StackPanel>
+        MouseDown="PanAndZoomCanvas_MouseDown"  Margin="0,104,0,0">
+            <Grid x:Name="Panner" Width="auto" Height="auto" VerticalAlignment="Center" HorizontalAlignment="Center" >
+                
+            </Grid>
 
 
 

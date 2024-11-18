@@ -125,7 +125,7 @@ namespace denememe
                 }
             }
             var point = e.GetPosition(WorkingArea);
-            Point pos = e.GetPosition(this);
+            Point pos = e.GetPosition(Panner);
 
             Xeksen.Text = "X:" + pos.X.ToString();
             Yeksen.Text = "Y:" + pos.Y.ToString();
@@ -140,26 +140,53 @@ namespace denememe
             System.Windows.Shapes.Path path = new System.Windows.Shapes.Path();
             path.Stroke = new SolidColorBrush(Colors.Black);
             
-            path.StrokeThickness = 0.5;
+            path.StrokeThickness = 0.2;
+           
             PathGeometry pathGeometry = new PathGeometry();
-            foreach (netDxf.Entities.Line item in dxfDocument.Entities.Lines)
+            foreach (var child in dxfDocument.Entities.All) 
             {
-                PathFigure pathFigure = new PathFigure();
-                pathFigure.StartPoint = new Point(item.StartPoint.X, item.StartPoint.Y);
-                LineSegment lineSegment = new LineSegment() { Point = new Point(item.EndPoint.X, item.EndPoint.Y) };
-                pathFigure.Segments.Add(lineSegment);
-                pathGeometry.Figures.Add(pathFigure);
-            }
-            if (dxfDocument.Entities.Arcs.Count() != 0)
-            {
-                foreach (netDxf.Entities.Arc item in dxfDocument.Entities.Arcs)
-                {
-                   PathFigure arcSegment = CreateArc(item.Center.X,item.Center.Y, item.Radius, item.StartAngle,item.EndAngle);
-                pathGeometry.Figures.Add(arcSegment);
-
+                switch (child.Type) 
+                { 
+                    case EntityType.Line:
+                        netDxf.Entities.Line line = (netDxf.Entities.Line)child;
+                        PathFigure pathFigure = new PathFigure();
+                        pathFigure.StartPoint = new Point(line.StartPoint.X, line.StartPoint.Y);
+                        LineSegment lineSegment = new LineSegment() { Point = new Point(line.EndPoint.X, line.EndPoint.Y) };
+                        pathFigure.Segments.Add(lineSegment);
+                        pathGeometry.Figures.Add(pathFigure);
+                        break;
+                    case EntityType.Arc:
+                        Arc arc = (Arc)child;
+                        PathFigure arcSegment = CreateArc(arc.Center.X, arc.Center.Y, arc.Radius, arc.StartAngle, arc.EndAngle);
+                        pathGeometry.Figures.Add(arcSegment);
+                        break;
                 }
-            }
+                if (child.Type != EntityType.Arc && child.Type != EntityType.Line) 
+                {
+                    Debug.WriteLine(child.Type);
+                }
+            
+            }//
+            //foreach (netDxf.Entities.Line item in dxfDocument.Entities.Lines)
+            //{
+            //    PathFigure pathFigure = new PathFigure();
+            //    pathFigure.StartPoint = new Point(item.StartPoint.X, item.StartPoint.Y);
+            //    LineSegment lineSegment = new LineSegment() { Point = new Point(item.EndPoint.X, item.EndPoint.Y) };
+            //    pathFigure.Segments.Add(lineSegment);
+            //    pathGeometry.Figures.Add(pathFigure);
+            //}
+            //if (dxfDocument.Entities.Arcs.Count() != 0)
+            //{
+            //    foreach (netDxf.Entities.Arc item in dxfDocument.Entities.Arcs)
+            //    {
+            //       PathFigure arcSegment = CreateArc(item.Center.X,item.Center.Y, item.Radius, item.StartAngle,item.EndAngle);
+            //    pathGeometry.Figures.Add(arcSegment);
+
+            //    }
+            //}
             path.Data = pathGeometry;
+            Canvas.SetLeft(path, 0);    
+            Canvas.SetTop(path, 0);    
             Panner.Children.Add(path);
           
         }
